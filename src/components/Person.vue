@@ -1,29 +1,37 @@
 <template>
     <div class="person">
-        <h2>姓名：{{ name }}</h2>
-        <h2>年龄：{{ age}}_{{ nl }}</h2>
+        <h1>情况3:监听【reactive】定义的【对象数据】类型</h1>
+        <h2>姓名：{{ person.name }}</h2>
+        <h2>年龄：{{ person.age }}</h2>
         <button @click="changeName">修改名字</button>
         <button @click="changeAge">修改年龄</button>
+        <button @click="changePerson">修改整个人</button>
     </div>
 </template>
 
 <script lang="ts" setup name="Person">
-    import { reactive ,toRefs,toRef} from 'vue'
+    import { reactive , watch} from 'vue'
+    //数据
     let person = reactive({
         name:'张三',
-        age:18
-    })
-
-    let {name,age} = toRefs(person) // 接收一个由reactive定义的响应式对象person 并将其中的所有key：value，变成响应式对象结构出来
-    let nl = toRef(person,"age")
+        age:18,
+        tel:'123456789'
+    })  
+    //方法
     function changeName(){
-        name.value += '~'
+        person.name += '~'
     }
-        
     function changeAge(){
         person.age += 1
-        console.log(person.age,age.value)
     }
+    function changePerson(){
+      Object.assign(person,{name:'李四',age:20})
+    }
+
+    //监控  监听【reactive】定义的【对象数据】类型，默认开启深度监控的，且关不掉。
+    watch(person,(newValue,oldValue)=>{
+        console.log('person变化了',newValue,oldValue)
+    })
 
 </script>
 

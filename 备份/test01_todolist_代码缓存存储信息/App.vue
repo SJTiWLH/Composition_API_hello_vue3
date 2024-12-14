@@ -13,43 +13,32 @@
   </template>
   
   <script setup>
-  import { ref, onMounted } from 'vue';
+  import { ref } from 'vue';
   
   // 用于存储新任务的输入内容
   const newTask = ref('');
   // 存储任务列表，每个任务是一个包含text和completed属性的对象
-  const tasks = ref([]);
+  const tasks = ref([
+    { text: '学习Vue 3', completed: false },
+    { text: '去超市购物', completed: false }
+  ]);
   
-  // 从本地存储中获取任务列表数据并解析，在组件挂载时执行
-  // todoTasks并不是一个实际存在于磁盘上的常规文件呀，它是利用浏览器提供的localStorage机制中的一个键（key）来存储数据的标识名称。
-  // localStorage是浏览器内置的一种简单的本地存储方式，它以键值对（key-value pairs）的形式将数据存储在浏览器端，数据保存在用户本地计算机的浏览器环境中，就像一个小型的本地数据库，但只支持存储字符串类型的数据。
-  onMounted(() => {
-    const storedTasks = localStorage.getItem('todoTasks');
-    if (storedTasks) {
-      tasks.value = JSON.parse(storedTasks);
-    }
-  });
-  
-  // 添加任务的方法，添加后同时更新本地存储
+  // 添加任务的方法
   const addTask = () => {
     if (newTask.value.trim()!== '') {
       tasks.value.push({ text: newTask.value, completed: false });
       newTask.value = '';
-      // 将更新后的任务列表存储到本地存储中
-      localStorage.setItem('todoTasks', JSON.stringify(tasks.value));
     }
   };
   
-  // 切换任务完成状态的方法，状态变更后更新本地存储
+  // 切换任务完成状态的方法
   const toggleTask = (index) => {
     tasks.value[index].completed =!tasks.value[index].completed;
-    localStorage.setItem('todoTasks', JSON.stringify(tasks.value));
   };
   
-  // 删除任务的方法，删除后更新本地存储
+  // 删除任务的方法
   const deleteTask = (index) => {
     tasks.value.splice(index, 1);
-    localStorage.setItem('todoTasks', JSON.stringify(tasks.value));
   };
   </script>
   
@@ -86,5 +75,6 @@
     border-radius: 3px;
     background-color: #007bff;
     color: white;
+    cursor: pointer;
   }
   </style>
